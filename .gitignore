@@ -203,3 +203,7 @@ docs/_build
 *.pb.h
 CMakeFiles*
 build*
+examples/ResNettest
+examples/test_caffemodel
+examples/squeezetest
+
