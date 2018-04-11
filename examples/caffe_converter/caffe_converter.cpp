@@ -71,6 +71,7 @@ void test(const std::string &model_file,
           const std::string &img_file) {
   auto labels = get_label_list(label_file);
   auto net    = tiny_dnn::create_net_from_caffe_prototxt(model_file);
+  std::cout << "Network create success!\n";
   tiny_dnn::reload_weight_from_caffe_protobinary(trained_file, net.get());
 
   // int channels = (*net)[0]->in_data_shape()[0].depth_;
