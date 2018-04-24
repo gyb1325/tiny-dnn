@@ -37,7 +37,7 @@ inline std::ostream &operator<<(std::ostream &os, backend_t type) {
     case backend_t::avx: os << "AVX"; break;
     case backend_t::opencl: os << "OpenCL"; break;
     case backend_t::cblas: os << "CBLAS"; break;
-    case backend_t::internal: os << "Internal with Bit error injectted"; break;
+    case backend_t::internal_inject: os << "Internal with Bit error injectted"; break;
     default: throw nn_error("Not supported ostream enum."); break;
   }
   return os;
