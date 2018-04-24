@@ -54,7 +54,7 @@ class GRUCellOp : public core::OpKernel {
 
     const core::backend_t engine = context.engine();
 
-    if (engine == core::backend_t::internal || engine == core::backend_t::avx) {
+    if (engine == core::backend_t::internal|| engine == core::backend_t::internal_inject || engine == core::backend_t::avx) {
       kernels::gru_cell_op_internal(
         x, h_prev, W_x2z[0], W_x2r[0], W_x2h[0], W_hr2c[0], W_s2z[0], W_s2r[0],
         params.has_bias_ ? (*b_2z)[0] : vec_t(),

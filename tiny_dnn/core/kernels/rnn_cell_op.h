@@ -39,7 +39,7 @@ class RecurrentCellOp : public core::OpKernel {
 
     const core::backend_t engine = context.engine();
 
-    if (engine == core::backend_t::internal || engine == core::backend_t::avx) {
+    if (engine == core::backend_t::internal||engine == core::backend_t::internal_inject || engine == core::backend_t::avx) {
       kernels::rnn_cell_op_internal(in_data, prev_h, U[0], W[0], V[0],
                                     params.has_bias_ ? (*bias)[0] : vec_t(),
                                     params.has_bias_ ? (*c)[0] : vec_t(),

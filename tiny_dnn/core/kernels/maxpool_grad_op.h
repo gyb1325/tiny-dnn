@@ -33,7 +33,7 @@ class MaxPoolGradOp : public core::OpKernel {
 
     const core::backend_t engine = context.engine();
 
-    if (engine == core::backend_t::internal) {
+    if (engine == core::backend_t::internal||engine == core::backend_t::internal_inject) {
       kernels::maxpool_grad_op_internal(prev_delta, curr_delta,
                                         params.out2inmax, params.in2out,
                                         context.parallelize());

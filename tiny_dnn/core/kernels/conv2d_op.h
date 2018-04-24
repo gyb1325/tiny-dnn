@@ -11,6 +11,7 @@
 
 #include "tiny_dnn/core/kernels/conv2d_op_avx.h"
 #include "tiny_dnn/core/kernels/conv2d_op_internal.h"
+#include "tiny_dnn/core/kernels/conv2d_op_internal_inject.h"
 #include "tiny_dnn/core/kernels/conv2d_op_nnpack.h"
 
 namespace tiny_dnn {
@@ -39,6 +40,9 @@ class Conv2dOp : public core::OpKernel {
 
     if (engine == core::backend_t::internal) {
       kernels::conv2d_op_internal(in_data, W[0], bias[0], out_data, params,
+                                  context.parallelize());
+    } else if (engine == core::backend_t::internal_inject) {
+      kernels::conv2d_op_internal_inject(in_data, W[0], bias[0], out_data, params,
                                   context.parallelize());
     } else if (engine == core::backend_t::nnpack) {
       kernels::conv2d_op_nnpack(in_data, W[0], bias[0], out_data, params);

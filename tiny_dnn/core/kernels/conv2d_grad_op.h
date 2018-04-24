@@ -38,7 +38,10 @@ class Conv2dGradOp : public core::OpKernel {
 
     const core::backend_t engine = context.engine();
 
-    if (engine == core::backend_t::internal) {
+    if (engine == core::backend_t::internal ) {
+      kernels::conv2d_op_internal(prev_out, W[0], dW, db, curr_delta,
+                                  prev_delta, params, context.parallelize());
+    } else if (engine == core::backend_t::internal_inject ) {
       kernels::conv2d_op_internal(prev_out, W[0], dW, db, curr_delta,
                                   prev_delta, params, context.parallelize());
     } else if (engine == core::backend_t::avx) {

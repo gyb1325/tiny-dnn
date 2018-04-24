@@ -35,7 +35,7 @@ class MaxPoolOp : public core::OpKernel {
 
     const core::backend_t engine = context.engine();
 
-    if (engine == core::backend_t::internal) {
+    if (engine == core::backend_t::internal ||engine == core::backend_t::internal_inject) {
       kernels::maxpool_op_internal(in_data, out_data, params.out2inmax,
                                    params.out2in, context.parallelize());
     } else if (engine == core::backend_t::nnpack) {

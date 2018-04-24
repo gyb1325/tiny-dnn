@@ -59,7 +59,7 @@ class LSTMCellOp : public core::OpKernel {
 
     const core::backend_t engine = context.engine();
 
-    if (engine == core::backend_t::internal || engine == core::backend_t::avx) {
+    if (engine == core::backend_t::internal||engine == core::backend_t::internal_inject || engine == core::backend_t::avx) {
       kernels::lstm_cell_op_internal(
         x, h_prev, c_prev, W_x2i[0], W_x2f[0], W_x2c[0], W_x2o[0], W_h2i[0],
         W_h2f[0], W_h2c[0], W_h2o[0], params.has_bias_ ? (*b_2i)[0] : vec_t(),

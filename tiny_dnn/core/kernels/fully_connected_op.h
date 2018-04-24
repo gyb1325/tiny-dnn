@@ -41,6 +41,10 @@ class FullyConnectedOp : public core::OpKernel {
       kernels::fully_connected_op_internal(
         in_data, W[0], params.has_bias_ ? (*bias)[0] : vec_t(), out_data,
         params, context.parallelize());
+    } else if (engine == core::backend_t::internal_inject) {
+      kernels::fully_connected_op_internal(
+        in_data, W[0], params.has_bias_ ? (*bias)[0] : vec_t(), out_data,
+        params, context.parallelize());
     } else if (engine == core::backend_t::nnpack) {
       kernels::fully_connected_op_nnpack(
         in_data, W[0], params.has_bias_ ? (*bias)[0] : vec_t(), out_data,
