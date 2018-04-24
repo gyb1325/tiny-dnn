@@ -261,3 +261,7 @@ examples/example_caffe_converter_CXX_cotire.cmake
 examples/example_cifar_test
 examples/example_test_char_rnn
 examples/example_mnist_train
+examples/example_exe
+*.cmake
+Makefile
+benchmarks_all

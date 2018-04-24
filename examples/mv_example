@@ -1,0 +1,1 @@
+find . -maxdepth 1 -name "*example_*" ! -name  "*exe*" -exec mv {} example_exe  \;
