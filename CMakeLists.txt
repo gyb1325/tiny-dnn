@@ -52,12 +52,15 @@ option(USE_TBB        "Build tiny-dnn with TBB library support"    OFF)
 option(USE_OMP        "Build tiny-dnn with OMP library support"    OFF)
 option(USE_NNPACK     "Build tiny-dnn with NNPACK library support" OFF)
 option(USE_CBLAS      "Build tiny-dnn with CBLAS library support" OFF)
-option(USE_OPENCL     "Build tiny-dnn with OpenCL library support" OFF) 
+option(USE_OPENCL     "Build tiny-dnn with OpenCL library support" OFF)
 option(USE_LIBDNN     "Build tiny-dnn with GreenteaLibDNN library support" OFF)
 option(USE_SERIALIZER "Build tiny-dnn with Serialization support"   ON)
 option(USE_DOUBLE     "Build tiny-dnn with double precision computations"  OFF)
 option(USE_IMAGE_API  "Build tiny-dnn with Image API support"       ON)
 option(USE_GEMMLOWP   "Build tiny-dnn with gemmlowp support"       OFF)
+
+
+option(USE_INJECT   "Build tiny-dnn with bit error injectted into backends"       OFF)
 
 option(BUILD_TESTS      "Set to ON to build tests"              OFF)
 option(BUILD_EXAMPLES   "Set to ON to build examples"           OFF)
@@ -242,6 +245,13 @@ if(CMAKE_COMPILER_IS_GNUCXX OR MINGW OR
         add_definitions(-DCNN_USE_SSE)
         set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} -msse3")
     endif(USE_SSE AND COMPILER_HAS_SSE_FLAG)
+
+
+    if(USE_INJECT)
+      add_definitions(-DCNN_USE_INJECT)
+    endif(USE_INJECT)
+
+
     # set Advanced Vector Extensions (AVX)
     if(USE_AVX AND COMPILER_HAS_AVX_FLAG)
         add_definitions(-DCNN_USE_AVX)
@@ -416,5 +426,3 @@ endif(BUILD_BENCHMARKS)
 # Configuration summary
 include(cmake/summary.cmake)
 tinydnn_print_configuration_summary()
-
-
