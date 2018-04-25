@@ -96,15 +96,34 @@ void test(const std::string &model_file,
 
   std::vector<tiny_dnn::float_t> sorted(result.begin(), result.end());
 
-  int top_n = 5;
-  partial_sort(sorted.begin(), sorted.begin() + top_n, sorted.end(),
-               std::greater<tiny_dnn::float_t>());
 
-  for (int i = 0; i < top_n; i++) {
-    size_t idx =
-      distance(result.begin(), find(result.begin(), result.end(), sorted[i]));
-    std::cout << labels[idx] << "," << sorted[i] << std::endl;
+  int top_n = 5;
+  int max_range=100;
+
+  std::vector<std::map<std::string, int>> results(top_n);
+
+  for(int range=0;range<max_range;range++){
+
+    auto result = net->predict(vec);
+    std::vector<tiny_dnn::float_t> sorted(result.begin(), result.end());
+    partial_sort(sorted.begin(), sorted.begin() + top_n, sorted.end(),
+                 std::greater<tiny_dnn::float_t>());
+    printf("***************iter-%d************",range+1);
+    for (int i = 0; i < top_n; i++) {
+      size_t idx =
+        distance(result.begin(), find(result.begin(), result.end(), sorted[i]));
+        results[i][labels[idx]]=results[i][labels[idx]]+1;
+      std::cout << labels[idx] << "," << sorted[i] << std::endl;
+    }
+
   }
+  for (int i = 0; i < top_n; i++) {
+    printf("***************top-%d************",i+1);
+    for (auto it = results[i].begin(); it != results[i].end(); ++it) {
+      std::cout << it->first << ", " << it->second*1.0/max_range <<  std::endl;
+    }
+  }
+
 }
 
 int main(int argc, char **argv) {

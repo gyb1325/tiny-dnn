@@ -265,3 +265,6 @@ examples/example_exe
 *.cmake
 Makefile
 benchmarks_all
+temp.c
+log.txt
+a.out

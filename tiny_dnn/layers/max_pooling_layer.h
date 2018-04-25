@@ -225,7 +225,7 @@ class max_pooling_layer : public layer {
     core::OpKernelConstruction ctx =
       core::OpKernelConstruction(layer::device(), &params_);
 
-    if (backend_type == core::backend_t::internal ||
+    if (backend_type == core::backend_t::internal||backend_type == core::backend_t::internal_inject ||
         backend_type == core::backend_t::nnpack ||
         backend_type == core::backend_t::avx) {
       kernel_fwd_.reset(new MaxPoolOp(ctx));

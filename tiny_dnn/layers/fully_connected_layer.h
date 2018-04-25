@@ -106,7 +106,7 @@ class fully_connected_layer : public layer {
     core::OpKernelConstruction ctx =
       core::OpKernelConstruction(layer::device(), &params_);
 
-    if (backend_type == core::backend_t::internal ||
+    if (backend_type == core::backend_t::internal ||backend_type == core::backend_t::internal_inject ||
         backend_type == core::backend_t::avx ||
         backend_type == core::backend_t::nnpack ||
         backend_type == core::backend_t::cblas) {

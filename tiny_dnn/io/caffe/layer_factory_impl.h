@@ -585,7 +585,7 @@ inline std::shared_ptr<layer> create_dropout(const caffe::LayerParameter &layer,
 inline std::shared_ptr<layer> create_convlayer(
   const caffe::LayerParameter &layer,
   const shape_t &bottom_shape,
-  shape_t *top_shape) {
+  shape_t *top_shape,bool inject=false) {
   using conv_layer = convolutional_layer;
 
   if (!layer.has_convolution_param()) {
@@ -652,7 +652,11 @@ inline std::shared_ptr<layer> create_convlayer(
 
   auto conv = std::make_shared<conv_layer>(
     in_width, in_height, window_size, in_channels, out_channels, table,
-    pad_type, has_bias, w_stride, h_stride);
+    pad_type, has_bias, w_stride, h_stride,
+    inject? core::backend_t::internal_inject : core::default_engine()
+  );
+
+
   // filler
   if (conv_param.has_weight_filler()) {
     conv->weight_init(create_filler(conv_param.weight_filler().type()));
@@ -824,11 +828,11 @@ inline bool layer_match(const std::string &caffetype,
 
 inline std::shared_ptr<layer> create(const caffe::LayerParameter &layer,
                                      const shape_t &in_shape,
-                                     shape_t *out_shape) {
+                                     shape_t *out_shape,bool inject) {
   const std::string layer_type = layer.type();
 
   if (layer_type == "Convolution") {
-    return detail::create_convlayer(layer, in_shape, out_shape);
+      return detail::create_convlayer(layer, in_shape, out_shape,inject);
   }
 
   if (layer_type == "Deconvolution") {

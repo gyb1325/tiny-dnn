@@ -22,6 +22,8 @@
 #include "tiny_dnn/optimizers/optimizer.h"
 #include "tiny_dnn/util/util.h"
 
+#define inject_layer_id 13
+
 namespace tiny_dnn {
 
 /**
@@ -77,9 +79,9 @@ inline std::shared_ptr<network<sequential>> create_net_from_caffe_net(
     }
 
     shape_t shape_next = shape;
-    auto layer         = detail::create(src_net[i], shape, &shape_next);
+    auto layer         = detail::create(src_net[i], shape, &shape_next,inject_layer_id==i?true:false);
 
-    nn_info("convert " + type + " => " + typeid(*layer).name());
+    nn_info("convert layer["+to_string(i)+"]" + type + " => " + typeid(*layer).name());
     nn_info("shape:" + to_string(shape_next));
 
     *dst_net << layer;

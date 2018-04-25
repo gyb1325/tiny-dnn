@@ -6,10 +6,24 @@
     in the LICENSE file.
 */
 #pragma once
+#include <stdlib.h>
+#include <iostream>
+#include <time.h>
+#define bit_pos 29
+
 
 namespace tiny_dnn {
 namespace kernels {
-
+float_t inject(float_t inp){
+    //std::cout.setf ( std::ios::hex, std::ios::basefield );  // set hex as the basefield
+    //std::cout.setf ( std::ios::showbase );
+    //std::cout<< inp<<std::endl;
+    unsigned  int bit_handler=*(unsigned int*)(&inp);
+    unsigned int mask=(1<<(bit_pos));
+    bit_handler=(bit_handler&(~mask))|((rand()%2)*mask);
+    inp=*(float_t*)(&bit_handler);
+    return inp;
+}
 inline void conv2d_op_internal_inject(const tensor_t &in_data,
                                const vec_t &W,
                                const vec_t &bias,
@@ -28,6 +42,15 @@ inline void conv2d_op_internal_inject(const tensor_t &in_data,
          size_t kh          = params.weight.height_;
          size_t elem_stride = params.w_stride;
          size_t line_stride = iw * params.h_stride;
+         //*******************inject_random****************
+         srand (time(NULL));
+         size_t inj_i_d     = rand() % id;
+         size_t inj_o_h     = rand() % oh;
+         size_t inj_o_w     = rand() % oh;
+         size_t inj_o_d     = rand() % od;
+         size_t inj_k_w     = rand() % kw;
+         size_t inj_k_h     = rand() % kh;
+         //*******************inject_random_end****************
          for (size_t sample = r.begin(); sample < r.end(); sample++) {
            const vec_t &in = in_data[sample];
            vec_t &a        = out_data[sample];
@@ -50,7 +73,21 @@ inline void conv2d_op_internal_inject(const tensor_t &in_data,
                    // should be optimized for small kernel(3x3,5x5)
                    for (size_t wy = 0; wy < kh; wy++) {    // NOLINT
                      for (size_t wx = 0; wx < kw; wx++) {  // NOLINT
-                       sum += pw_element[wx] * pin_element[wx];
+
+                       float_t pw_element_inject=pw_element[wx];
+                       float_t pin_element_inject=pin_element[wx];
+                       if(
+                         (wy==inj_k_h) &&
+                         (wx==inj_k_w) &&
+                         (x==inj_o_w) &&
+                         (y==inj_o_h) &&
+                         (inc==inj_i_d) &&
+                         (o==inj_o_d)
+                       ){
+                         pw_element_inject=inject(pw_element[wx]);
+                         pin_element_inject=inject(pin_element[wx]);
+                       }
+                       sum += pw_element_inject * pin_element_inject;
                      }
                      pw_element += kw;
                      pin_element += iw;
