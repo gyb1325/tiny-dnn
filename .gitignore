@@ -210,3 +210,8 @@ examples/example_exe
 *.cmake
 Makefile
 benchmarks_all
+caffe
+CaffeNet
+AlexNet
+NiN
+ConvNet
